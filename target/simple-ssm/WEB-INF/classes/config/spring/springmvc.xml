@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--加载静态资源-->
+    <mvc:default-servlet-handler/>
+
+    <!--开启注解模式-->
+    <mvc:annotation-driven/>
+
+    <!--注入适配器-->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
+    <!--自定义参数绑定组件-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <!--转换器-->
+        <property name="converters">
+            <set>
+                <!--日期类型转换-->
+                <bean class="web.controller.converter.CustomDateConverter"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--组件扫描-->
+    <context:component-scan base-package="web.controller"/>
+
+    <!--全局错误信息处理器-->
+    <bean class="web.exception.CustomExceptionResolver"/>
+
+    <!--视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>
